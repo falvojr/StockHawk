@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/half_margin"
+        android:hint="@string/dialog_hint">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/stock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,9 +17,8 @@
             android:layout_marginRight="@dimen/half_half_margin"
             android:layout_marginStart="@dimen/half_half_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:hint="@string/dialog_hint"
             android:inputType="textCapCharacters" />
 
-    </LinearLayout>
+    </android.support.design.widget.TextInputLayout>
 
 </layout>

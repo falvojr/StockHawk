@@ -7,6 +7,7 @@
 
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_trans_z">12dp</dimen>
 
     <dimen name="price_text_view_margin">10sp</dimen>
     <dimen name="change_text_view_padding">3dp</dimen>
