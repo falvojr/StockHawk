@@ -74,12 +74,15 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         String change = mDollarFormatWithPlus.format(rawAbsoluteChange);
         String percentage = mPercentageFormat.format(percentageChange / 100);
 
-        final Context context = holder.itemView.getContext();
+        final View rootView = holder.itemView;
+        final Context context = rootView.getContext();
         if (PrefUtils.getDisplayMode(context).equals(context.getString(R.string.pref_display_mode_absolute_key))) {
             holder.mBinding.change.setText(change);
         } else {
             holder.mBinding.change.setText(percentage);
         }
+
+        rootView.setOnClickListener(holder);
     }
 
     @Override

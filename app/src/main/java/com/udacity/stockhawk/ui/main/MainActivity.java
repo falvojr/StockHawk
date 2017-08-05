@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
@@ -24,6 +25,7 @@ import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.databinding.ActivityMainBinding;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
+import com.udacity.stockhawk.ui.history.HistoryActivity;
 
 import timber.log.Timber;
 
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onClick(String symbol) {
         Timber.d("Symbol clicked: %s", symbol);
+        final Intent intent = new Intent(this, HistoryActivity.class);
+        super.startActivity(intent);
     }
 
     @Override
@@ -71,12 +75,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         }).attachToRecyclerView(mBinding.recyclerView);
 
-
+        mBinding.fab.setOnClickListener(this::addStock);
     }
 
     private boolean networkUp() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
@@ -102,20 +105,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    public void button(@SuppressWarnings("UnusedParameters") View view) {
+    private void addStock(View view) {
         new AddStockDialog().show(getFragmentManager(), "StockDialogFragment");
     }
 
     void addStock(String symbol) {
         if (symbol != null && !symbol.isEmpty()) {
-
             if (networkUp()) {
                 mBinding.swipeRefresh.setRefreshing(true);
             } else {
                 String message = getString(R.string.toast_stock_added_no_connectivity, symbol);
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
-
             PrefUtils.addStock(this, symbol);
             QuoteSyncJob.syncImmediately(this);
         }
