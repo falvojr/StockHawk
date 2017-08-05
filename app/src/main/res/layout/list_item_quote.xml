@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/symbol"
-        style="@style/StockSymbolTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="start|center_vertical"
-        tools:text="GOOG" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="end">
+        <TextView
+            android:id="@+id/symbol"
+            style="@style/StockSymbolTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/half_margin"
+            android:layout_marginEnd="@dimen/half_margin"
+            android:layout_marginTop="@dimen/half_margin"
+            android:gravity="start|center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/firstGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="GOOG" />
 
         <TextView
             android:id="@+id/price"
             style="@style/BidPriceTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10sp"
+            android:layout_marginBottom="@dimen/half_margin"
+            android:layout_marginEnd="@dimen/half_margin"
+            android:layout_marginTop="@dimen/half_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/secondGuideline"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="1000.00" />
 
         <TextView
@@ -35,9 +41,34 @@
             style="@style/PercentChangeTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/percent_change_pill_green"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
+            android:paddingEnd="@dimen/change_text_view_padding"
+            android:paddingLeft="@dimen/change_text_view_padding"
+            android:paddingRight="@dimen/change_text_view_padding"
+            android:paddingStart="@dimen/change_text_view_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/secondGuideline"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="100%" />
-    </LinearLayout>
-</LinearLayout>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/firstGuideline"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/secondGuideline"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -1,7 +1,8 @@
-package com.udacity.stockhawk.ui;
+package com.udacity.stockhawk.ui.main;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,16 +17,14 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.databinding.ActivityMainBinding;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -33,16 +32,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         StockAdapter.StockAdapterOnClickHandler {
 
     private static final int STOCK_LOADER = 0;
-    @SuppressWarnings("WeakerAccess")
-    @BindView(R.id.recycler_view)
-    RecyclerView stockRecyclerView;
-    @SuppressWarnings("WeakerAccess")
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
-    @SuppressWarnings("WeakerAccess")
-    @BindView(R.id.error)
-    TextView error;
-    private StockAdapter adapter;
+
+    private StockAdapter mAdapter;
+    private ActivityMainBinding mBinding;
 
     @Override
     public void onClick(String symbol) {
@@ -52,16 +44,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        mAdapter = new StockAdapter(this);
+        mBinding.recyclerView.setAdapter(mAdapter);
+        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new StockAdapter(this, this);
-        stockRecyclerView.setAdapter(adapter);
-        stockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setRefreshing(true);
+        mBinding.swipeRefresh.setOnRefreshListener(this);
+        mBinding.swipeRefresh.setRefreshing(true);
         onRefresh();
 
         QuoteSyncJob.initialize(this);
@@ -75,11 +65,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                String symbol = adapter.getSymbolAtPosition(viewHolder.getAdapterPosition());
+                String symbol = mAdapter.getSymbolAtPosition(viewHolder.getAdapterPosition());
                 PrefUtils.removeStock(MainActivity.this, symbol);
                 getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
             }
-        }).attachToRecyclerView(stockRecyclerView);
+        }).attachToRecyclerView(mBinding.recyclerView);
 
 
     }
@@ -96,19 +86,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         QuoteSyncJob.syncImmediately(this);
 
-        if (!networkUp() && adapter.getItemCount() == 0) {
-            swipeRefreshLayout.setRefreshing(false);
-            error.setText(getString(R.string.error_no_network));
-            error.setVisibility(View.VISIBLE);
+        if (!networkUp() && mAdapter.getItemCount() == 0) {
+            mBinding.swipeRefresh.setRefreshing(false);
+            mBinding.error.setText(getString(R.string.error_no_network));
+            mBinding.error.setVisibility(View.VISIBLE);
         } else if (!networkUp()) {
-            swipeRefreshLayout.setRefreshing(false);
+            mBinding.swipeRefresh.setRefreshing(false);
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
         } else if (PrefUtils.getStocks(this).size() == 0) {
-            swipeRefreshLayout.setRefreshing(false);
-            error.setText(getString(R.string.error_no_stocks));
-            error.setVisibility(View.VISIBLE);
+            mBinding.swipeRefresh.setRefreshing(false);
+            mBinding.error.setText(getString(R.string.error_no_stocks));
+            mBinding.error.setVisibility(View.VISIBLE);
         } else {
-            error.setVisibility(View.GONE);
+            mBinding.error.setVisibility(View.GONE);
         }
     }
 
@@ -120,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (symbol != null && !symbol.isEmpty()) {
 
             if (networkUp()) {
-                swipeRefreshLayout.setRefreshing(true);
+                mBinding.swipeRefresh.setRefreshing(true);
             } else {
                 String message = getString(R.string.toast_stock_added_no_connectivity, symbol);
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -141,25 +131,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        swipeRefreshLayout.setRefreshing(false);
+        mBinding.swipeRefresh.setRefreshing(false);
 
         if (data.getCount() != 0) {
-            error.setVisibility(View.GONE);
+            mBinding.error.setVisibility(View.GONE);
         }
-        adapter.setCursor(data);
+        mAdapter.setCursor(data);
     }
 
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        swipeRefreshLayout.setRefreshing(false);
-        adapter.setCursor(null);
+        mBinding.swipeRefresh.setRefreshing(false);
+        mAdapter.setCursor(null);
     }
 
 
     private void setDisplayModeMenuItemIcon(MenuItem item) {
-        if (PrefUtils.getDisplayMode(this)
-                .equals(getString(R.string.pref_display_mode_absolute_key))) {
+        if (PrefUtils.getDisplayMode(this).equals(getString(R.string.pref_display_mode_absolute_key))) {
             item.setIcon(R.drawable.ic_percentage);
         } else {
             item.setIcon(R.drawable.ic_dollar);
@@ -181,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (id == R.id.action_change_units) {
             PrefUtils.toggleDisplayMode(this);
             setDisplayModeMenuItemIcon(item);
-            adapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
             return true;
         }
         return super.onOptionsItemSelected(item);
