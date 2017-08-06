@@ -1,6 +1,5 @@
-package com.udacity.stockhawk.ui.history;
+package com.udacity.stockhawk.ui;
 
-import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -23,7 +22,6 @@ import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.databinding.ActivityHistoryBinding;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
 
-import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,9 +35,6 @@ public class HistoryActivity extends AppCompatActivity implements LoaderManager.
 
     private String mSymbol;
     private ActivityHistoryBinding mBinding;
-
-    @SuppressLint("SimpleDateFormat")
-    private SimpleDateFormat mDateFormat = new SimpleDateFormat("dd/MM/yy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +91,14 @@ public class HistoryActivity extends AppCompatActivity implements LoaderManager.
         this.changeColor(android.R.color.primary_text_dark, yAxisLeft, yAxisRight, xAxis, legend);
 
         xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-        xAxis.setValueFormatter((value, axis) ->  "");
+        xAxis.setValueFormatter((value, axis) -> "");
 
         mBinding.chart.invalidate();
     }
 
     private void changeColor(int colorRes, ComponentBase... components) {
         final int color = ContextCompat.getColor(this, colorRes);
-        for (final ComponentBase component: components) {
+        for (final ComponentBase component : components) {
             component.setTextColor(color);
         }
     }

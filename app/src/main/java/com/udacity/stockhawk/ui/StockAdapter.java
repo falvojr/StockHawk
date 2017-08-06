@@ -1,4 +1,4 @@
-package com.udacity.stockhawk.ui.main;
+package com.udacity.stockhawk.ui;
 
 
 import android.content.Context;
@@ -13,6 +13,7 @@ import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.databinding.ListItemQuoteBinding;
+import com.udacity.stockhawk.util.AppUtils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -20,22 +21,11 @@ import java.util.Locale;
 
 class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
-    private final DecimalFormat mDollarFormatWithPlus;
-    private final DecimalFormat mDollarFormat;
-    private final DecimalFormat mPercentageFormat;
     private Cursor mCursor;
     private final StockAdapterOnClickHandler mClickHandler;
 
     StockAdapter(StockAdapterOnClickHandler clickHandler) {
         this.mClickHandler = clickHandler;
-
-        mDollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
-        mDollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
-        mDollarFormatWithPlus.setPositivePrefix("+$");
-        mPercentageFormat = (DecimalFormat) NumberFormat.getPercentInstance(Locale.getDefault());
-        mPercentageFormat.setMaximumFractionDigits(2);
-        mPercentageFormat.setMinimumFractionDigits(2);
-        mPercentageFormat.setPositivePrefix("+");
     }
 
     void setCursor(Cursor cursor) {
@@ -60,7 +50,7 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         mCursor.moveToPosition(position);
 
         holder.mBinding.symbol.setText(mCursor.getString(Contract.Quote.POSITION_SYMBOL));
-        holder.mBinding.price.setText(mDollarFormat.format(mCursor.getFloat(Contract.Quote.POSITION_PRICE)));
+        holder.mBinding.price.setText(AppUtils.getInstance().getDollarFormat().format(mCursor.getFloat(Contract.Quote.POSITION_PRICE)));
 
         float rawAbsoluteChange = mCursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
         float percentageChange = mCursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE);
@@ -71,8 +61,8 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
             holder.mBinding.change.setBackgroundResource(R.drawable.percent_change_pill_red);
         }
 
-        String change = mDollarFormatWithPlus.format(rawAbsoluteChange);
-        String percentage = mPercentageFormat.format(percentageChange / 100);
+        String change = AppUtils.getInstance().getDollarFormatWithPlus().format(rawAbsoluteChange);
+        String percentage = AppUtils.getInstance().getPercentageFormat().format(percentageChange / 100);
 
         final View rootView = holder.itemView;
         final Context context = rootView.getContext();

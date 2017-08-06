@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Widget layouts not work with ConstraintLayout: https://stackoverflow.com/a/6150129/3072570 -->
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="10">
 
         <TextView
             android:id="@+id/symbol"
             style="@style/StockSymbolTextStyle"
-            android:layout_width="@dimen/symbol_width"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/half_margin"
             android:layout_marginEnd="@dimen/half_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/half_margin"
+            android:layout_weight="3"
             android:textAlignment="textEnd"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/price"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="GOOG" />
 
         <TextView
@@ -30,36 +27,24 @@
             style="@style/BidPriceTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/half_margin"
             android:layout_marginEnd="@dimen/half_margin"
             android:layout_marginStart="@dimen/half_margin"
-            android:layout_marginTop="@dimen/half_margin"
+            android:layout_weight="4.5"
             android:textAlignment="textEnd"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/change"
-            app:layout_constraintStart_toEndOf="@+id/symbol"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="1000.00" />
 
         <TextView
             android:id="@+id/change"
             style="@style/PercentChangeTextStyle"
-            android:layout_width="@dimen/change_width"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/half_margin"
-            android:layout_marginTop="@dimen/half_margin"
+            android:layout_weight="2.5"
             android:background="@drawable/percent_change_pill_green"
-            android:paddingEnd="@dimen/change_text_view_padding"
-            android:paddingStart="@dimen/change_text_view_padding"
             android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/price"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="100%" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 </layout>

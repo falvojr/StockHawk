@@ -1,4 +1,4 @@
-package com.udacity.stockhawk.ui.main;
+package com.udacity.stockhawk.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +25,6 @@ import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.databinding.ActivityMainBinding;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
-import com.udacity.stockhawk.ui.history.HistoryActivity;
 
 import timber.log.Timber;
 
