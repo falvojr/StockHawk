@@ -30,6 +30,9 @@ import yahoofinance.quotes.stock.StockQuote;
 
 public final class QuoteSyncJob {
 
+    public static final String HISTORY_BREAK = "\n";
+    public static final String HISTORY_SEPARATOR = ", ";
+
     private static final int ONE_OFF_ID = 2;
     private static final String ACTION_DATA_UPDATED = "com.udacity.stockhawk.ACTION_DATA_UPDATED";
     private static final int PERIOD = 300000;
@@ -39,6 +42,7 @@ public final class QuoteSyncJob {
     private static final String NOT_AVAILABLE = "N/A";
 
     private QuoteSyncJob() {
+        super();
     }
 
     static void getQuotes(Context context) {
@@ -89,9 +93,9 @@ public final class QuoteSyncJob {
 
                     for (HistoricalQuote it : history) {
                         historyBuilder.append(it.getDate().getTimeInMillis());
-                        historyBuilder.append(", ");
+                        historyBuilder.append(HISTORY_SEPARATOR);
                         historyBuilder.append(it.getClose());
-                        historyBuilder.append("\n");
+                        historyBuilder.append(HISTORY_BREAK);
                     }
 
                     ContentValues quoteCV = new ContentValues();
@@ -147,8 +151,7 @@ public final class QuoteSyncJob {
 
     public static synchronized void syncImmediately(Context context) {
 
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             Intent nowIntent = new Intent(context, QuoteIntentService.class);
@@ -157,10 +160,8 @@ public final class QuoteSyncJob {
 
             JobInfo.Builder builder = new JobInfo.Builder(ONE_OFF_ID, new ComponentName(context, QuoteJobService.class));
 
-
             builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
-
 
             JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
 

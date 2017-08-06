@@ -13,8 +13,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/half_half_margin"
             android:layout_marginEnd="@dimen/half_half_margin"
-            android:layout_marginLeft="@dimen/half_half_margin"
-            android:layout_marginRight="@dimen/half_half_margin"
             android:layout_marginStart="@dimen/half_half_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:inputType="textCapCharacters" />

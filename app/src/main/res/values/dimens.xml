@@ -11,4 +11,7 @@
 
     <dimen name="price_text_view_margin">10sp</dimen>
     <dimen name="change_text_view_padding">3dp</dimen>
+
+    <dimen name="symbol_width">100dp</dimen>
+    <dimen name="change_width">85dp</dimen>
 </resources>
