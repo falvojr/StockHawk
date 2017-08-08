@@ -3,6 +3,7 @@ package com.udacity.stockhawk.sync;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Binder;
+import android.util.TypedValue;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -77,6 +78,11 @@ public class StockWidgetDataProvider implements RemoteViewsService.RemoteViewsFa
         } else {
             remoteViews.setTextViewText(R.id.change, percentage);
         }
+
+//        remoteViews.setTextViewTextSize(R.id.symbol, TypedValue.COMPLEX_UNIT_SP, 12);
+//        remoteViews.setTextViewTextSize(R.id.price, TypedValue.COMPLEX_UNIT_SP, 12);
+//        remoteViews.setTextViewTextSize(R.id.change, TypedValue.COMPLEX_UNIT_SP, 10);
+
         return remoteViews;
     }
 
