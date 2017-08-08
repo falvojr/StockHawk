@@ -1,11 +1,8 @@
 package com.udacity.stockhawk.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -25,6 +22,7 @@ import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.databinding.ActivityMainBinding;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
+import com.udacity.stockhawk.util.AppUtils;
 
 import timber.log.Timber;
 
@@ -78,22 +76,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mBinding.fab.setOnClickListener(this::addStock);
     }
 
-    private boolean networkUp() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
-
     @Override
     public void onRefresh() {
-
         QuoteSyncJob.syncImmediately(this);
 
-        if (!networkUp() && mAdapter.getItemCount() == 0) {
+        final boolean isConnected = AppUtils.getInstance().isConnected(this);
+        if (!isConnected && mAdapter.getItemCount() == 0) {
             mBinding.swipeRefresh.setRefreshing(false);
             mBinding.error.setText(getString(R.string.error_no_network));
             mBinding.error.setVisibility(View.VISIBLE);
-        } else if (!networkUp()) {
+        } else if (!isConnected) {
             mBinding.swipeRefresh.setRefreshing(false);
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
         } else if (PrefUtils.getStocks(this).size() == 0) {
@@ -111,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     void addStock(String symbol) {
         if (symbol != null && !symbol.isEmpty()) {
-            if (networkUp()) {
+            if (AppUtils.getInstance().isConnected(this)) {
                 mBinding.swipeRefresh.setRefreshing(true);
             } else {
                 String message = getString(R.string.toast_stock_added_no_connectivity, symbol);
