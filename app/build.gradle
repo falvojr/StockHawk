@@ -63,8 +63,9 @@ ext {
     yahooFinanceVersion = '3.8.0'
     timberVersion = '4.5.1'
     opencsvVersion = '2.3'
-    mpAndroidChartVersion = '3.0.2'
+    mpAndroidChartVersion = 'v3.0.2'
     constraintLayoutVersion = '1.0.2'
+    junitVersion = '4.12'
 }
 
 dependencies {
@@ -79,5 +80,5 @@ dependencies {
     compile "net.sf.opencsv:opencsv:${opencsvVersion}"
     compile "com.github.PhilJay:MPAndroidChart:${mpAndroidChartVersion}"
     compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
-    testCompile 'junit:junit:4.12'
+    testCompile "junit:junit:${junitVersion}"
 }
