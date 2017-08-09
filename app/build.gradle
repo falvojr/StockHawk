@@ -57,16 +57,27 @@ check {
     }
 }
 
+ext {
+    supportLibVersion = '25.3.1'
+    guavaVersion = '20.0'
+    yahooFinanceVersion = '3.8.0'
+    timberVersion = '4.5.1'
+    opencsvVersion = '2.3'
+    mpAndroidChartVersion = '3.0.2'
+    constraintLayoutVersion = '1.0.2'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.google.guava:guava:20.0'
-    compile 'com.yahoofinance-api:YahooFinanceAPI:3.8.0'
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    compile 'net.sf.opencsv:opencsv:2.3'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.google.guava:guava:${guavaVersion}"
+    compile "com.yahoofinance-api:YahooFinanceAPI:${yahooFinanceVersion}"
+    compile "com.jakewharton.timber:timber:${timberVersion}"
+    compile "net.sf.opencsv:opencsv:${opencsvVersion}"
+    compile "com.github.PhilJay:MPAndroidChart:${mpAndroidChartVersion}"
+    compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
     testCompile 'junit:junit:4.12'
 }
